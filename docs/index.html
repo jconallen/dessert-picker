@@ -48,6 +48,25 @@
 
     </div>
 
+    <div id="dessertModal" class="modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">You deserve...</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="dessertName"></p>
+                    <img id="dessertImage" src="" width="240">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- code -->
     <script src="js/utils.js"></script>
 
@@ -70,22 +89,22 @@
 
             questions = data;
 
-            console.log( questions );
+            console.log(questions);
 
 
             await async.eachSeries(data, assembleQuestions, (err) => {
                 if (err) console.error(err);
             });
 
-            for( var i=0; i<questions.length; i++ ){
+            for (var i = 0; i < questions.length; i++) {
                 var question = questions[i];
                 buildQuestion(question, i);
             }
 
         }
 
-        async function assembleQuestions(question){
-            questions.push( question );
+        async function assembleQuestions(question) {
+            questions.push(question);
         }
 
         var answerWeights = {};
@@ -96,12 +115,12 @@
             `;
             $('#questions').append(div);
 
-            for( var i=0; i<question.answers.length; i++){
+            for (var i = 0; i < question.answers.length; i++) {
                 var answer = question.answers[i];
                 var adiv = `<div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="A${answer.answer}" id="A${answer.answer}"
-                        value="${answer.weight}" onclick="addWeight('${answer.answer}','${answer.weight}')">
-                    <label class="form-check-label" for="A${question.question}">${answer.answer}</label>
+                    <input class="form-check-input" type="radio" name="Q${index}" id="A${answer.answer}"
+                        value="${answer.weight}" onclick="addWeight('${index}','${answer.weight}')">
+                    <label class="form-check-label" for="Q${index}">${answer.answer}</label>
                 </div>`;
                 $(`#Q${index}`).append(adiv);
             }
@@ -109,35 +128,42 @@
             $('#questions').append("</div");
         }
 
-        async function appendAnswer(answer) {
-            var div = `<div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="A${answer.answer}" id="A${answer.answer}"
-                        value="${answer.weight}" onclick="alert('${answer.answer} ${answer.weight}')">
-                    <label class="form-check-label" for="A${answer.answer}">${answer.answer}</label>
-                </div>`;
-            $('#questions').append(div);
-        }
-
-        function addWeight(question, weight){
+        function addWeight(question, weight) {
             answerWeights[question] = weight;
         }
 
-        function pickDessert(){
+        function pickDessert() {
             // sum weights
             var totalWeight = 0;
+            console.log( 'total weight: ' + totalWeight );
+            console.log( JSON.stringify(answerWeights,null,4) );
             var keys = Object.keys(answerWeights);
-            for( var i=0; i<keys.length; i++){
+            for (var i = 0; i < keys.length; i++) {
                 var weight = answerWeights[keys[i]];
                 totalWeight += parseInt(weight);
             }
 
-            if( totalWeight > 20 ) {
-                alert( 'you get cherry ice cream')
-            } else if (totalWeight > 10 ) {
-                alert ('you get brownies' ) 
+            if (totalWeight > 25) {
+                $('#dessertName').html("Triple Chocolate Cake!");
+                $('#dessertImage').attr("src", "images/triple-chocolate-cake.jpg");
+            } else if (totalWeight > 20) {
+                $('#dessertName').html("a Cherry Delight!");
+                $('#dessertImage').attr("src", "images/Cherry-Delight-Dessert.jpg");
+            } else if (totalWeight > 10) {
+                $('#dessertName').html("brownies!");
+                $('#dessertImage').attr("src", "images/brownies.jpg");
+            } else if (totalWeight > 5) {
+                $('#dessertName').html("a bannana split!");
+                $('#dessertImage').attr("src", "images/ice-cream-sundaes-banana-split.jpg");
             } else {
-                alert( 'you get okra')
+                $('#dessertName').html("okra... raw.");
+                $('#dessertImage').attr("src", "images/okra.jpg");
             }
+
+            var dessertModal = new bootstrap.Modal(document.getElementById('dessertModal'), {
+                keyboard: false
+            });
+            dessertModal.show();
 
             console.log(totalWeight);
         }
