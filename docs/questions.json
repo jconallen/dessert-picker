@@ -1,0 +1,57 @@
+[
+    {
+        "question": "Fill in the blank: I felt ______________ for that homeless child that has nothing to eat.",
+        "answers": [
+            { "answer": "Humourous", "weight": 0},
+            { "answer": "Sympathy", "weight": 5},
+            { "answer": "Depressed", "weight": 3},
+            { "answer": "Sarcastic", "weight": 1}
+        ]
+    },
+    {
+        "question": "Visions of Christmas lights twinkling on rooftops, gleeful children dancing around the festive tree. Oh, what a _________________time of year!",
+        "answers": [
+            { "answer": "Melancholy", "weight": 0},
+            { "answer": "Joyful", "weight": 5},
+            { "answer": "Wistful", "weight": 3},
+            { "answer": "Biased", "weight": 3}
+        ]
+    },
+    {
+        "question": "After all the holiday cheer is gone, there is an emptiness in my heart, and I feel ",
+        "answers": [
+            { "answer": "Joyful", "weight": 5},
+            { "answer": "Hostile", "weight": 1},
+            { "answer": "Sympathetic", "weight": 4},
+            { "answer": "Gloomy", "weight": 0}
+        ]
+    },
+    {
+        "question": "The children felt _______________ as they stared out the dark and rainy window.",
+        "answers": [
+            { "answer": "Wistful", "weight": 5},
+            { "answer": "Cheerful", "weight": 3},
+            { "answer": "Sarcastic", "weight": 0},
+            { "answer": "Gloomy", "weight": 1}
+        ]
+    },
+    {
+        "question": "Which tone is represented in the following passage? Wow! With a top speed of one hundred fifty miles per hour, that car can almost fly!",
+        "answers": [
+            { "answer": "Calm", "weight": 2},
+            { "answer": "Annoyed", "weight": 1},
+            { "answer": "Scary", "weight": 4},
+            { "answer": "Excited", "weight": 5}
+        ]
+    },
+    {
+        "question": "The footsteps were coming closer. I knew I had to get out of there fast. Looking desperately around, I finally spotted a small window at the end of the room, a beacon of light in the dark, rancid basement. I sprinted and leapt up to grab a ceiling pipe. Thankfully, the pipe was close enough to the window to allow me to swing my body through. My enemy was making his way down the hall, bursting open door after door. I needed to break through this window in two tries to make it out in time.What is the mood of the passage?",
+        "answers": [
+            { "answer": "Timid", "weight": 1},
+            { "answer": "Cheerful", "weight": 0},
+            { "answer": "Sorrowful", "weight": 2},
+            { "answer": "Daring", "weight": 5}
+        ]
+    }
+    
+]

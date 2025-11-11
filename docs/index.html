@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.5.3/papaparse.min.js"
+        integrity="sha256-NVP7i99bgATOVTHmgn6ByLNOezmSZ3lndUVEBk6XsBY=" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.7.2/build/global/luxon.min.js"
+        integrity="sha256-UWxf6lyCvfH7XEcrmq/cqc2m3IBrLBLOnWLC4Pw0gQQ=" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/async@3.2.6/dist/async.min.js"
+        integrity="sha256-uDzWtmm1K/XBN81NsKQ3dxp0KF3jz7XPO8F3WAA0Whg=" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/idb@8.0.3/build/umd.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico?">
+
+</head>
+
+<body>
+    <div id="navbar"></div>
+
+    <div class="container">
+        <h1>Dessert Decider</h1>
+
+        <div class="container">
+
+
+            <div id="questions" class="container">
+            </div>
+
+            <div>
+                <button type="button" class="btn btn-primary" onclick="pickDessert()">What dessert am I having?</button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- code -->
+    <script src="js/utils.js"></script>
+
+    <script type="text/javascript">
+
+        $(function () {
+            $("#navbar").load("navbar.html");
+        });
+
+        window.addEventListener("load", async (event) => {
+            fetch('questions.json')
+                .then(response => response.json())
+                .then(buildQuestionaire)
+            //.catch(error => alert('Error fetching JSON:', error));
+        });
+
+        var questions = [];
+
+        async function buildQuestionaire(data) {
+
+            questions = data;
+
+            console.log( questions );
+
+
+            await async.eachSeries(data, assembleQuestions, (err) => {
+                if (err) console.error(err);
+            });
+
+            for( var i=0; i<questions.length; i++ ){
+                var question = questions[i];
+                buildQuestion(question, i);
+            }
+
+        }
+
+        async function assembleQuestions(question){
+            questions.push( question );
+        }
+
+        var answerWeights = {};
+
+        async function buildQuestion(question, index) {
+            var div = `<div id="Q${index}" class="container border" style="margin:10px;">
+                <p>${question.question}</p>
+            `;
+            $('#questions').append(div);
+
+            for( var i=0; i<question.answers.length; i++){
+                var answer = question.answers[i];
+                var adiv = `<div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="A${answer.answer}" id="A${answer.answer}"
+                        value="${answer.weight}" onclick="addWeight('${answer.answer}','${answer.weight}')">
+                    <label class="form-check-label" for="A${question.question}">${answer.answer}</label>
+                </div>`;
+                $(`#Q${index}`).append(adiv);
+            }
+
+            $('#questions').append("</div");
+        }
+
+        async function appendAnswer(answer) {
+            var div = `<div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="A${answer.answer}" id="A${answer.answer}"
+                        value="${answer.weight}" onclick="alert('${answer.answer} ${answer.weight}')">
+                    <label class="form-check-label" for="A${answer.answer}">${answer.answer}</label>
+                </div>`;
+            $('#questions').append(div);
+        }
+
+        function addWeight(question, weight){
+            answerWeights[question] = weight;
+        }
+
+        function pickDessert(){
+            // sum weights
+            var totalWeight = 0;
+            var keys = Object.keys(answerWeights);
+            for( var i=0; i<keys.length; i++){
+                var weight = answerWeights[keys[i]];
+                totalWeight += parseInt(weight);
+            }
+
+            if( totalWeight > 20 ) {
+                alert( 'you get cherry ice cream')
+            } else if (totalWeight > 10 ) {
+                alert ('you get brownies' ) 
+            } else {
+                alert( 'you get okra')
+            }
+
+            console.log(totalWeight);
+        }
+
+
+    </script>
+</body>
+
+</html>
